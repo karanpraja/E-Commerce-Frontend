@@ -14,4 +14,20 @@
 14.using link component by wrapping around button element
 15.using grids properly//
 16.Adding buttons properly
-17.
+
+28/10/23
+1.adding links>making data.json //dummy api>reading json.server documentation to run server>
+2.Modifying product api>according to json server port
+3.Using redux>initializing category filter
+4.extracting categories and brand using map and also using quokka js plugin>using set(removing duplicate values>then pasting them to their position
+5.filtering data accordingly using>using inline event filters>by using spread operators
+6.Read json server documentation to read more about sorting and filtering 
+7.Making a new api for filtering products
+8.let queryString=''>queryString+=`${key}=${filter[key]}` then using it with fetch call
+9.Learn about thunks and how to use them>modifying sort options>reading documentation to implement sorting algorithm>adding 
+10.Adding sort and order in sort options and rating>modifying menu item capturing event,using seperate objects for sort and filter
+11.Dividing component into sub components >fixing uncheck functionality by adding if condition
+ if(e.target.checked)
+{newFilter[section.id].push(option.value)}
+else{delete newFilter[section.id]}
+12.using splice function efficiently in new code for newfilter + modifying it
