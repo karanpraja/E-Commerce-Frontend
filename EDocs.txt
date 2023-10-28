@@ -31,3 +31,4 @@
 {newFilter[section.id].push(option.value)}
 else{delete newFilter[section.id]}
 12.using splice function efficiently in new code for newfilter + modifying it
+/////////
