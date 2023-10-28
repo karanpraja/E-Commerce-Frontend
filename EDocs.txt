@@ -1,0 +1,17 @@
+1.Install react with redux template
+2.Install tailwind css using documentation->initialize tcss->read tailwind docs for react
+3.Learn about redux
+4.installing dev tools>>>adding extensions
+5.installing tailwind css aspect ratio>adding products list>paste plugins but also install them>you made a mistake in cartegoryFilter what is that?
+6.Creating product list and importing it from tailwind and creating product list>importing category filter
+7.adding navbar>handling css in navbar 
+8.adding pagination>
+9.Making signup and login pages
+10.Making auth component
+11.Using Router for routing>how we did?
+12.We use link to create a link tree but navlink to desired link back or forward but it is not in the case of link we can only go forward
+13.added cart component and modified it 
+14.using link component by wrapping around button element
+15.using grids properly//
+16.Adding buttons properly
+17.
