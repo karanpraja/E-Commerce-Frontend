@@ -1,9 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAllProducts, fetchAllProductsBySort, filterAllProducts } from "./ProductsApi";
+import { fetchAllBrands, fetchAllCategories, fetchAllProducts,  fetchProductDetails,  filterAllProducts } from "./ProductsApi";
 
 const initialState = {
   products: [],
+  categories:[],
+  brands:[],
   status: "idle",
+  totalItems:0,
+  productDetail:null
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -19,13 +23,38 @@ export const fetchAllProductsAsync = createAsyncThunk(
     return response.data;
   }
 );
-export const filterAllProductsAsync = createAsyncThunk(
-  "products/filterAllProducts",
-async ({filter,sort}) => {
-    console.log(filter)
-    const response = await filterAllProducts({filter,sort});
+export const fetchProductDetailsAsync=createAsyncThunk(
+  "products/fetchProductDetails",
+  async (id)=>{
+    const response=await fetchProductDetails(id);
+    console.log(id+"slice")
+    return response.data
+   
+  }
+)
+export const fetchAllCategoriesAsync = createAsyncThunk(
+  "categories/fetchAllCategories",
+  async () => {
+    const response = await fetchAllCategories();
     // The value we return becomes the `fulfilled` action payload
     return response.data;
+  }
+);
+export const fetchAllBrandsAsync = createAsyncThunk(
+  "brands/fetchAllBrands",
+  async () => {
+    const response = await fetchAllBrands();
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const filterAllProductsAsync = createAsyncThunk(
+  "products/filterAllProducts",
+async ({filter,sort,pagination}) => {
+    console.log(filter)
+    const response = await filterAllProducts({filter,sort,pagination});
+    // The value we return becomes the `fulfilled` action payload
+    return response.responseData;
   }
 );
 export const productsSlice = createSlice({
@@ -53,28 +82,57 @@ export const productsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllProductsAsync.pending, (state) => {
-        state.status = "loading";
+        state.status = "loading"
       })
       .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.products = action.payload;
+        state.status = "idle"
+        state.products = action.payload
       })
       .addCase(filterAllProductsAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(filterAllProductsAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.products = action.payload;
+        state.products = action.payload.products;
+        state.totalItems=action.payload.totalItems
+        // console.log(action.payload)
+      })
+      .addCase(fetchAllCategoriesAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllCategoriesAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+       state.categories=action.payload
+        // console.log(action.payload)
+      })
+      .addCase(fetchAllBrandsAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllBrandsAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+       state.brands=action.payload
+      
+      })
+      .addCase(fetchProductDetailsAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProductDetailsAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+       state.productDetail=action.payload
       })
   },
 });
 
-export const { products } = productsSlice.actions; //they are reducers but use actions to access the function
+export const { products,totalItems} = productsSlice.actions; //they are reducers but use actions to access the function
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectProducts = (state) => state.products.products;
+export const selectProducts = (state) => state.products.products
+export const selectBrands=(state)=>state.products.brands
+export const selectCategories=(state)=>state.products.categories
+export const selectProductDetails=(state)=>state.products.productDetail
+
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
 // export const incrementIfOdd = (amount) => (dispatch, getState) => {

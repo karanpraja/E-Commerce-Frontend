@@ -1,13 +1,16 @@
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { useForm } from "react-hook-form"
 
-import { NavLink } from "react-router-dom"
+
 
 const Login=()=>{
-    const navigate=useNavigate()
-    const navigateHandler=()=>{
-        navigate('/')
-    }
-
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm()
+    const onSubmit = (data) => console.log(data)
 return(<div>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -16,12 +19,14 @@ return(<div>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form onSubmit={navigateHandler}
-    class="space-y-6" action="#" method="POST">
+    <form onSubmit={handleSubmit(onSubmit)} class="space-y-6" action="#" method="POST">
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
-          <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input 
+          {...register('emailRequired')}
+          id="email" type="email"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 p-5 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          {errors.emailRequired&&<span>{errors.emailRequired.message}</span>}
         </div>
       </div>
 
@@ -33,7 +38,11 @@ return(<div>
           </div>
         </div>
         <div class="mt-2">
-          <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input 
+          {...register("password",{required:"Password is required"})}
+          id="password" type="password"
+          formNoValidate class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 p-5 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          {errors.password&&<span>{errors.password.message}</span>}
         </div>
       </div>
 

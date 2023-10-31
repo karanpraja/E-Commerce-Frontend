@@ -1,6 +1,24 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { fetchUserDataAsync } from "../authSlice"
+import { useDispatch } from "react-redux"
 
 const SignUp=()=>{
+  const dispatch=useDispatch()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+
+  const onSubmit = (data) => {
+   dispatch(fetchUserDataAsync(data))
+    console.log(data)
+  }
+
+
+  console.log(watch("example")) // watch input value by passing the name of it
 return(<div>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -9,11 +27,19 @@ return(<div>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST">
+    <form noValidate onSubmit={handleSubmit(onSubmit)}class="space-y-6" >
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
-          <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input id="email"  {...register('email',{required:'email is required'
+          ,pattern:{
+            value:/\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
+            message:"Email is not valid"
+          }})}type="email" class="block w-full rounded-md border-0 p-5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+          {/* {errors.email&&<span>{errors.email.message}</span>}
+           */}
+           <p className="text-red-500">{errors?.email?.message}</p>
         </div>
       </div>
 
@@ -23,7 +49,12 @@ return(<div>
         </div>
       
         <div class="mt-2">
-          <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input id="password"  {...register('password',{required:'password is required',
+        pattern:{
+          value:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
+          message:"- at least 8 characters\n- must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number\n- Can contain special characters"
+        }})}type="password"   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm p-5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+           <p className="text-red-500">{errors?.password?.message}</p>
         </div>
       </div>
 
@@ -33,7 +64,9 @@ return(<div>
         </div>
       
         <div class="mt-2">
-          <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          <input id="confirmpassword"  {...register('confirmpassword',
+          {required:'confirmpassword is required',validate: (value, formValues) => value === formValues.password||'please enter matching password'})}type="password"   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 p-5 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+           <p className="text-red-500">{errors?.confirmpassword?.message}</p>
         </div>
       </div>
 
